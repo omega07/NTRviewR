@@ -1,0 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.editor-parent {
+    height: 100vh;
+}
+
+.editor-window {
+    height:65%;
+} 
+
+.loading {
+    position: fixed;
+    color: blue;
+    margin-top: 2.4%;
+    margin-left: 10.4%
+}
+
+.io-section {
+    height: 30%;
+    display: flex;
+    background-color: #272822;
+    /* padding: 2%; */
+}
+
+#options {
+    height: 5%;
+    width: 100%;
+    font-size: 15px;
+    background-color: #272822;
+}
+
+#select-box, #select-theme-box {
+    height: 25px;
+    margin-top: 4px;
+    margin-left: 3%;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: #272822;
+    color: white;
+    cursor: pointer;
+}
+
+.input-section, .output-section  {
+    position: relative;
+    top: 30%;
+    left: -20%;
+    margin: 2%;
+    height: 40%;
+    width: 20%;
+    font-size: 13px;
+    border: 1px solid;
+    border-radius: 10px;
+    outline: none;
+    background-color: #494b41;
+    padding: 1%;
+    color: white;
+    border: none;
+}
+
+.compile {
+    position: absolute;
+    top: -35%;
+    font-weight: bolder;
+    color: red;
+}
+
+.cpu {
+    position: relative;
+    top: -30%;
+    left: -30%;
+    font-size: 17px;
+    font-weight: bolder;
+    color: white;
+}
+
+.error-field {
+    position: relative;
+    top: 45%;
+    left: -10%;
+    height: 40%;
+    width: 40%;
+}
+
+.error-msg-field {
+    height: 100%;
+    width: 100%;
+    background-color: #272822;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: white;
+}
+
+.input-section::placeholder, .output-section::placeholder {
+    color: white;
+    /* padding: 2%; */
+}
+
+
+.run-btn, .reset-btn {
+    margin: 2%;
+    position: relative;
+    left: 2%;
+    width: 7%;
+    bottom: -2%;
+    height: 14%;
+    font-size: 100%;
+    font-family: sans-serif;
+    border: 1px solid;
+    border-radius: 5px;
+    background-color: rgb(158, 109, 204);
+    scrollbar-highlight-color: white;
+    outline: none;
+}
+
+.run-btn:hover, .reset-btn:hover {
+    background-color: rgb(125, 87, 161);
+    cursor: pointer;
+}
