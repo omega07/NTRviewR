@@ -1,5 +1,5 @@
 # edoC-Editor
-A code Editor with multiple language and theme support. Created using ReactJS from scratch, hence used webpack and, babel for static file generation and NodeJS for serving the application
+A code Editor with multiple language and theme support. Created using ReactJS from scratch, hence used webpack and babel for the obvious and NodeJS for serving the application. It is a client-side rendered application.
 <br>
 **To run the application locally:**<br>
 -> clone the repository <br>
