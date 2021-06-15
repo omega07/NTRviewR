@@ -23,7 +23,7 @@ const App = () => {
     "package main"+"\n"+"import \"fmt\"\n\n"+"func main() {"+"\n\t"+"fmt.Println(\"Hello World\")"+"\n"+"}"
   ];
   const langForserver = [
-    'cpp',
+    'cpp17',
     'nodejs',
     'python3',
     'java',
@@ -77,7 +77,7 @@ const App = () => {
     setErrorMsg('');
     setCompilation('');
     setCpu('');
-    axios.post('http://localhost:5000',{
+    axios.post(location.href,{
       "code" : codeValue,
       "lang" : langForserver[index],
       "input": inputValue
