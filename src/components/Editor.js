@@ -16,7 +16,7 @@ import UUID from 'uuidjs';
 import {io} from 'socket.io-client';
 
 
-const socket = io('ws://192.168.0.101:8000');
+const socket = io('https://edoc-editor.herokuapp.com/');
 
 const Editor = () => {
   const [userID, setUserID] = useState(null);
@@ -103,7 +103,7 @@ const Editor = () => {
     setErrorMsg('');
     setCompilation('');
     setCpu('');
-    axios.post('http://192.168.0.101:8000',{
+    axios.post('https://edoc-editor.herokuapp.com/',{
       "code" : codeValue,
       "lang" : langForserver[index],
       "input": inputValue
