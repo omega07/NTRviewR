@@ -2,10 +2,10 @@ const path =  require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     mode: 'development',
-    entry:"./index.js",
+    entry:"./src/index.js",
     output: {
         path: path.join(__dirname,'/public'),
-        filename: 'bundle.js'
+        filename: 'bundle.[fullhash].js'
     },
     plugins: [
         new HTMLWebpackPlugin({
@@ -15,7 +15,7 @@ module.exports = {
     module : {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(jsx|js|ts)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
@@ -26,5 +26,8 @@ module.exports = {
                 use: ["style-loader", "css-loader"],
             }
         ]
+    },
+    devServer: {
+        historyApiFallback: true,
     }
 }

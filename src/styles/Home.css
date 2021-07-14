@@ -1,0 +1,48 @@
+.home__joinroom {
+    display: flex;
+    margin-top: 10%;
+}
+
+.home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    width: 30%;
+    border: 1px solid #000;
+    margin-top: 10%;
+}
+
+.homex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home__roominput, .home__usernameinput {
+    padding: 5px;
+    margin: 5%;
+}
+
+
+.roominput {
+    display: flex;
+    flex-direction: column;
+}
+
+.home__usernameError, .home__roomIDError {
+    display: flex;
+    align-items: center;
+    font-size: 2px;
+    color: red !important;
+}
+
+.usernameinput {
+    padding: 5px;
+    margin-bottom: 5%;
+}
+
+.btn__joinroom {
+    margin: 5%;
+}
