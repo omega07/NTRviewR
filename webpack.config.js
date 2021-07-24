@@ -1,11 +1,11 @@
 const path =  require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     entry:"./src/index.js",
     output: {
         path: path.join(__dirname,'/public'),
-        filename: 'bundle.[fullhash].js',
+        filename: 'bundle.js',
         publicPath: '/'
     },
     plugins: [
