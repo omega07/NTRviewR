@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const app = express();
+const mongoose = require('mongoose');
 const path = require('path');
 const PORT = process.env.PORT || 8000;
 const cors = require('cors');
@@ -10,76 +11,147 @@ const url = "https://api.jdoodle.com/v1/execute";
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const server = require('http').createServer(app);
-require('dotenv').config();
+const {addUser, getUsers, deleteUser} = require('./src/utils/users.js');
+const Document = require('./src/utils/document.js');
 const io = require('socket.io')(server, {
   cors: {
     origin: '*',
   }
 });
 
-let editor_code = "";
+const DB_URL = `mongodb+srv://ayushshah:${process.env.DB_PASS}@cluster0.qugft.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+
+mongoose.connect(DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 app.use(cors());
+let codeMap = new Map();
+let textMap = new Map();
+let userArray = [];
 
-const updateUsers = () => {
+const updateUsers = (roomID) => {
     const users = [];
-    for (let {user} of io.of("/").sockets.values()) {
-        users.push({
-            userID: user,
-            typing: false
-        });
-    }
-    return users;
+    userArray.forEach(user => {
+        if(roomID===user.roomID) {
+            users.push({
+                userID: user.userID,
+                typing: false,
+                name: user.username
+            })
+        }
+    });
+    return users.filter(user => user.userID);
 }
 
-const updateUserTyping = recUser => {
+const updateUserTyping = (recUser, roomID) => {
     const users = [];
-    for (let {user} of io.of("/").sockets.values()) {
-        users.push({
-            userID: user,
-            typing: (user === recUser?true:false)
-        });
-    }
-    return users;
+    userArray.forEach(user => {
+        if(roomID===user.roomID) {
+            users.push({
+                userID: user.userID,
+                typing: (user === recUser?true:false),
+                name: user.username
+            })
+        }
+    });
+    return users.filter(user => user.userID);
+}
+
+let editor_code = "#include <bits/stdc++.h>"+"\n"+"using namespace std;"+"\n"+"int main() {"+"\n"+"\tcout<<\"Hello, World!\";"+"\n"+"}";
+let defaultCode = editor_code;
+let userMessages = [];
+
+const userMessagesofRoom = (roomID) => {
+    const msgs = [];
+    userMessages.forEach(msg => {
+        if(msg.roomID===roomID) msgs.push(msg);
+    });
+    return msgs;
 }
 
 io.on('connection', socket => {
-    socket.on('new-user', user => {
+    socket.on('join-room', ({user, roomID, name}) => {
+        socket.join(roomID);
         socket.user = user;
-        if(editor_code.length) {
-            socket.emit('code-change',editor_code);
+        userArray = addUser(socket.id, user, name, roomID);
+        if(codeMap.get(roomID)===defaultCode) {
+            codeMap.set(roomID,editor_code);    
         }
-        io.emit('users',updateUsers());
-    })
-    socket.on('code-change', ({code,user}) => {
-        editor_code = code;
-        socket.broadcast.emit('code-change',code);
-        io.emit('user-typing', updateUserTyping(user));
-    })
-    socket.on('disconnect', reason => {
-        io.emit('users',updateUsers());
-    })
-    socket.on('theme-change', theme => {
-        socket.broadcast.emit('theme-change', theme);
-    })
-    socket.on('snippet-change', data => {
-        socket.broadcast.emit('snippet-change', data);
-    })
+        if(textMap.get(roomID)==="") {
+            textMap.set(roomID, "");
+        }
+        socket.emit('code-change',codeMap.get(roomID));
+        socket.emit('recieve-changes',textMap.get(roomID));
+        const newUser = updateUsers(roomID);
+        io.to(roomID).emit('users', newUser);
+        socket.on('code-change', ({code,user}) => {
+            if(code.length) {
+                codeMap.set(roomID,code);
+                userArray = getUsers();
+                socket.to(roomID).emit('user-typing', updateUserTyping(user, roomID));
+                socket.to(roomID).emit('code-change',codeMap.get(roomID));
+            } else {
+                socket.emit('code-change', codeMap.get(roomID));
+            }
+        })
+        socket.on('theme-change', theme => {
+            socket.to(roomID).emit('theme-change', theme);
+        })
+        socket.on('snippet-change', data => {
+            socket.to(roomID).emit('snippet-change', data);
+        })
+        socket.on('message', data => {
+            if(data.message.length) {
+                userMessages.push({...data, roomID});
+            }
+            io.to(roomID).emit('new-message', userMessagesofRoom(roomID));
+        })
+        socket.on('send-changes', ({data, tp, contents}) => {
+            if(tp) {
+                socket.emit('recieve-changes', textMap.get(roomID));
+            } else {
+                textMap.set(roomID, contents);
+                socket.to(roomID).emit('recieve-changes', data);
+            }
+        })
+        socket.on('disconnect', reason => {
+            const userDisconnected = deleteUser(socket.id);
+            userArray = getUsers();
+            io.to(roomID).emit('users',updateUsers(roomID));
+        })
+    });
 });
 
 app.get('/',(req,res) => {
     res.sendFile(path.join(__dirname,'/public/index.html'));
 });
 
-app.get('/editor',(req,res) => {
+
+app.get('/room/:id',(req,res) => {
     res.sendFile(path.join(__dirname,'/public/index.html'));
 });
 
+app.get('/report', (req, res) => {
+    res.sendFile(path.join(__dirname,'/public/index.html'));
+})
+
+app.post('/report', (req, res) => {
+    Document.create({email: req.body.email, bug: req.body.bug})
+            .then(result => {
+                res.send(result);
+            })
+            .catch(err => {
+                res.send(err);
+            })
+})
+
+
 app.post('/', (req,res) => {
-    console.log(req.body);
     const program = {
         "clientId" : clientId,
         "clientSecret" : clientSecret,

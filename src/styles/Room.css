@@ -1,0 +1,8 @@
+.room {
+    display: flex;
+}
+
+.room__inner {
+    height: 91vh;
+    width: 80%;
+}

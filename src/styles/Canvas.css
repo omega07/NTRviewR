@@ -1,0 +1,10 @@
+.canvas {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.canvas > p {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 3vw;
+}

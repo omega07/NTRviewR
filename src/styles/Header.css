@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+SC:wght@600&family=Otomanopee+One&display=swap');
+
+.header {
+    width: 100%;
+    height: 9vh;
+    background-color: black;
+    color: white;
+    top: 0;
+    display: flex;
+    align-items: center;
+}
+
+.space {
+    width: 5%;
+    height: 1%;
+    background-color: black;
+}
+
+.header__logo {
+    margin-left: 3%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.report_bugs {
+    font-size: 1.3vw;
+    color: white;
+}
+
+.header__avatar__name {
+    margin-left: 73%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header__avatar {
+    font-size: xx-small !important;
+    margin-right: 10%;
+}
+
+.header__user {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 1.5vw;
+    color: cornflowerblue;
+}
+
+.uniq-user {
+    margin-left: 2%;
+}
+
+.header__logo__name {
+    font-family: 'Otomanopee One', sans-serif;
+    font-size: 1.2vw;
+    color: white;
+}
+
+
+.header__logo__image {
+    margin-right: 2%;
+}

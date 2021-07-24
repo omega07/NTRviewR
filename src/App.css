@@ -1,0 +1,40 @@
+ul {
+    list-style: none;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    height: 5vh;
+    display: flex;
+}
+
+
+label {
+    color: white;
+    margin: 0;
+}
+
+li {
+    display: inline-block;
+    align-content: space-between;
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: bolder;
+    padding-top: 0.5%;
+}
+
+input:checked + label {
+    background-color: rgb(91, 91, 95);
+    color: white;
+}
+
+li > input {
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.ev_c {
+    cursor: pointer;
+    height: 10%;
+    width: 10%;
+    background-color: rgb(0, 0, 0);
+    padding: 5px;
+    border-radius: 10px;
+}

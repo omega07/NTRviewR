@@ -5,7 +5,8 @@ module.exports = {
     entry:"./src/index.js",
     output: {
         path: path.join(__dirname,'/public'),
-        filename: 'bundle.[fullhash].js'
+        filename: 'bundle.[fullhash].js',
+        publicPath: '/'
     },
     plugins: [
         new HTMLWebpackPlugin({
@@ -24,6 +25,14 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ["style-loader", "css-loader"],
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    {
+                        loader: 'file-loader',
+                    }
+                ]
             }
         ]
     },
